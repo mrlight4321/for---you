@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة المتفوقين - الثانوية العامة</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --accent-gold: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e1b4b, #311b92);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-gold);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .user-avatar-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-gold);
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+        }
+
+        .coins-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--accent-gold);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            color: var(--accent-gold);
+            font-weight: 800;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .coins-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .quote-box {
+            background: var(--bg-card);
+            border-right: 4px solid var(--accent-gold);
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: var(--accent-gold);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.8rem;
+        }
+
+        /* Pomodoro Timer */
+        .timer-display {
+            font-size: 3.2rem;
+            font-weight: 800;
+            text-align: center;
+            margin: 1rem 0;
+            color: #fff;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            touch-action: manipulation;
+        }
+
+        .btn:hover, .btn:active {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary { background: var(--accent-gold); color: #000; }
+        .btn-danger { background: var(--accent-rose); }
+        .btn-break { background: var(--accent-purple); width: 100%; justify-content: center; margin-top: 1.2rem; font-size: 1.1rem; padding: 0.9rem; }
+        .btn-daily { background: var(--accent-emerald); color: #fff; margin-top: 8px; width: 100%; justify-content: center; }
+
+        /* To-Do List */
+        .todo-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #fff;
+            outline: none;
+        }
+
+        .todo-list {
+            list-style: none;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-primary);
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .todo-item.completed span {
+            text-decoration: line-through;
+            color: var(--text-sub);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 160px;
+        }
+
+        /* Whiteboard & PDF Section Styling */
+        .studio-card {
+            grid-column: 1 / -1;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            align-items: center;
+            background: var(--bg-primary);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        #pdfCanvas, #drawCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #drawCanvas {
+            z-index: 2;
+            cursor: crosshair;
+        }
+
+        #pdfCanvas {
+            z-index: 1;
+        }
+
+        /* Modal & Wallet */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 2px solid var(--accent-gold);
+            border-radius: 20px;
+            width: 95%;
+            max-width: 650px;
+            padding: 1.2rem;
+            position: relative;
+            text-align: center;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 1.8rem;
+            color: var(--text-sub);
+            cursor: pointer;
+        }
+
+        .wallet-box {
+            background: linear-gradient(135deg, #1e1b4b, #0f172a);
+            border: 2px solid var(--accent-gold);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .wallet-balance {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin: 10px 0;
+        }
+
+        .game-tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: #0f172a;
+            color: var(--text-sub);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-purple);
+            color: #fff;
+            border-color: var(--accent-purple);
+        }
+
+        .game-panel {
+            display: none;
+            background: #090d16;
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .game-panel.active {
+            display: block;
+        }
+
+        .avatar-game-frame {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-gold);
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+        }
+
+        .avatar-game-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #snakeCanvas {
+            background: #050811;
+            border: 2px solid var(--accent-emerald);
+            border-radius: 10px;
+            margin: 10px auto;
+            display: block;
+            touch-action: none;
+        }
+
+        .snake-dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 50px);
+            gap: 6px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .snake-dpad .btn {
+            padding: 0.8rem;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .king-battle-box {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 1rem 0;
+            background: #1e1b4b;
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .hp-bar {
+            width: 100%;
+            background: #334155;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .hp-fill {
+            height: 100%;
+            background: var(--accent-rose);
+            width: 100%;
+            transition: width 0.3s;
+        }
+
+        .funny-quote {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            font-style: italic;
+            color: var(--accent-gold);
+            min-height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.2rem;
+            color: var(--text-sub);
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="user-profile-header">
+            <img src="https://j.top4top.io/p_39520arcm1.jpeg" alt="Princess Avatar" class="user-avatar-img">
+            <h1><i class="fa-solid fa-graduation-cap"></i> رفيق المتفوقة - 3 ثانوي</h1>
+        </div>
+        <div class="coins-badge" onclick="openWalletModal()">
+            <i class="fa-solid fa-wallet"></i> المحفظة: <span id="user-coins">500</span> 🪙 (اضغطي للعرض)
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Motivational Quote -->
+        <div class="quote-box" id="quote-display">
+            <span id="quote-text">"رحلة الألف ميل تبدأ بـ خطوة، وكل دقيقة مذاكرة تقربك من حلمك!"</span>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Pomodoro Section -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>مؤقت المذاكرة (البومودورو)</span>
+                </div>
+                <div class="timer-display" id="timer">25:00</div>
+                <div class="timer-controls">
+                    <button class="btn btn-primary" id="start-btn"><i class="fa-solid fa-play"></i> ابدأ</button>
+                    <button class="btn" id="pause-btn"><i class="fa-solid fa-pause"></i> إيقاف</button>
+                    <button class="btn btn-danger" id="reset-btn"><i class="fa-solid fa-rotate-right"></i> إعادة</button>
+                </div>
+                <button class="btn btn-break" onclick="openGameModal()">
+                    <i class="fa-solid fa-gamepad"></i> منطقة الألعاب (25 كوين) 🎮
+                </button>
+                <button class="btn btn-daily" onclick="claimDailyCoins()">
+                    <i class="fa-solid fa-gift"></i> استلام 75 كوينز اليومية 🪙
+                </button>
+            </div>
+
+            <!-- To-Do List Section -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>جدول مهام اليوم</span>
+                </div>
+                <div class="todo-input-group">
+                    <input type="text" id="todo-input" placeholder="أضفي درس أو مادة...">
+                    <button class="btn btn-primary" onclick="addTodo()"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <ul class="todo-list" id="todo-list"></ul>
+            </div>
+
+            <!-- Notes Section -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>ملاحظات سريعة / قوانين</span>
+                </div>
+                <textarea id="notes-input" placeholder="دوني القوانين الهامة هنا..." oninput="saveNotes()"></textarea>
+            </div>
+
+            <!-- Whiteboard & PDF Interactive Section -->
+            <div class="card studio-card">
+                <div class="card-header">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <span>استوديو المذاكرة (السبورة التفاعلية وتعديل PDF)</span>
+                </div>
+                
+                <div class="toolbar">
+                    <label class="btn btn-primary" style="cursor: pointer;">
+                        <i class="fa-solid fa-file-pdf"></i> رفع ملف PDF
+                        <input type="file" id="pdf-upload" accept="application/pdf" style="display: none;" onchange="loadPDF(event)">
+                    </label>
+
+                    <button class="btn" onclick="setMode('pen')"><i class="fa-solid fa-pen"></i> قلم</button>
+                    <button class="btn" onclick="setMode('eraser')"><i class="fa-solid fa-eraser"></i> ممحاة</button>
+                    
+                    <input type="color" id="pen-color" value="#ef4444" style="border:none; width:35px; height:35px; border-radius:5px; cursor:pointer;" onchange="updatePenColor(this.value)">
+                    <input type="range" id="pen-size" min="1" max="20" value="3" style="width: 80px;" onchange="updatePenSize(this.value)">
+
+                    <button class="btn btn-danger" onclick="clearCanvas()"><i class="fa-solid fa-trash"></i> مسح الكل</button>
+                    
+                    <div id="pdf-nav" style="display: none; gap: 8px; align-items: center; margin-right: auto;">
+                        <button class="btn" onclick="prevPage()"><i class="fa-solid fa-chevron-right"></i></button>
+                        <span>صفحة <b id="page-num">1</b> / <b id="page-count">1</b></span>
+                        <button class="btn" onclick="nextPage()"><i class="fa-solid fa-chevron-left"></i></button>
+                    </div>
+                </div>
+
+                <div class="canvas-container" id="canvas-wrapper">
+                    <canvas id="pdfCanvas"></canvas>
+                    <canvas id="drawCanvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div class="modal" id="wallet-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeWalletModal()">&times;</span>
+            <h2 style="color: var(--accent-gold);"><i class="fa-solid fa-wallet"></i> محفظة الكوينز الملكية</h2>
+            
+            <div class="wallet-box">
+                <p style="color: var(--text-sub);">الرصيد المتاح حالياً:</p>
+                <div class="wallet-balance"><span id="modal-wallet-coins">500</span> 🪙</div>
+                <p style="font-size: 0.9rem; color: var(--accent-emerald);">تم إضافة 500 كوينز كهدية ترحيبية! 🎉</p>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button class="btn btn-primary" onclick="addBonusCoins(100)">🪙 مكافأة مذاكرة (+100)</button>
+                <button class="btn btn-daily" onclick="claimDailyCoins()">🎁 المكافأة اليومية (+75)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Games Modal -->
+    <div class="modal" id="game-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeGameModal()">&times;</span>
+            <h2 style="color: var(--accent-gold);"><i class="fa-solid fa-gamepad"></i> صالة الألعاب</h2>
+            <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 4px;">تكلفة الدخول لكل لعبة: 25 كوينز 🪙</p>
+            
+            <div class="game-tabs">
+                <button class="tab-btn active" onclick="selectGame('phoenix')">أسطورة العنقاء 🪶</button>
+                <button class="tab-btn" onclick="selectGame('snake')">الثعبان 🐍 (50 دور)</button>
+                <button class="tab-btn" onclick="selectGame('kings')">حرب الملوك ⚔️ (50 مستوى)</button>
+            </div>
+            
+            <!-- Game 1: Phoenix -->
+            <div class="game-panel active" id="panel-phoenix">
+                <p style="color: var(--text-sub); font-size: 0.95rem;">اعتني بلقب الأميرة مع القط البرتقالي لارتقاء العرش!</p>
+                <div class="avatar-game-frame">
+                    <img src="https://j.top4top.io/p_39520arcm1.jpeg" alt="Princess Character">
+                </div>
+                <h3 id="rank-title" style="color: #fff;">اللقب: تلميذة مبتدئة</h3>
+                <div style="margin: 10px 0;">
+                    <div class="stat-bar" style="background:#000; height:10px; border-radius:5px; overflow:hidden;"><div id="stat-bar" style="height:100%; background:var(--accent-gold); width:10%;"></div></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <button class="btn" onclick="gameAction('dress')">👔 أزياء فاخرة</button>
+                    <button class="btn" onclick="gameAction('cat')">🐱 جمع مع القط</button>
+                    <button class="btn" onclick="gameAction('study')">📜 تطوير المهارات</button>
+                    <button class="btn btn-primary" onclick="gameAction('promote')">👑 طلب الترقية</button>
+                </div>
+                <p id="game-log" style="margin-top: 10px; color: var(--accent-gold); font-size: 0.9rem; min-height: 20px;"></p>
+            </div>
+
+            <!-- Game 2: Snake -->
+            <div class="game-panel" id="panel-snake">
+                <div style="display: flex; justify-content: space-around; font-size: 0.95rem;">
+                    <span>المستوى: <b id="snake-round" style="color:var(--accent-gold)">1</b> / 50</span>
+                    <span>التفاح المحصل: <b id="snake-apples" style="color:var(--accent-rose)">0</b> / 10 🍎</span>
+                </div>
+                <canvas id="snakeCanvas" width="260" height="260"></canvas>
+                <div class="snake-dpad">
+                    <div></div>
+                    <button class="btn" onclick="setSnakeDir('UP')">⬆️</button>
+                    <div></div>
+                    <button class="btn" onclick="setSnakeDir('LEFT')">⬅️</button>
+                    <button class="btn" onclick="setSnakeDir('DOWN')">⬇️</button>
+                    <button class="btn" onclick="setSnakeDir('RIGHT')">➡️</button>
+                </div>
+            </div>
+
+            <!-- Game 3: Clash of Kings -->
+            <div class="game-panel" id="panel-kings">
+                <h3 style="color: var(--accent-rose);">المستوى: <span id="king-level">1</span> / 50</h3>
+                <div class="king-battle-box">
+                    <div style="width: 42%;">
+                        <div style="font-size: 2.2rem;" id="player-avatar">👸🏻</div>
+                        <div style="font-size: 0.85rem;" id="player-name">أميرة الثانوية</div>
+                        <div class="hp-bar"><div class="hp-fill" id="player-hp" style="background: var(--accent-emerald);"></div></div>
+                    </div>
+                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--accent-gold);">VS</div>
+                    <div style="width: 42%;">
+                        <div style="font-size: 2.2rem;" id="enemy-icon">👹</div>
+                        <div style="font-size: 0.85rem;" id="enemy-name">العدو الأول</div>
+                        <div class="hp-bar"><div class="hp-fill" id="enemy-hp"></div></div>
+                    </div>
+                </div>
+                <div class="funny-quote" id="king-quote">"استعدي للمواجهة يا بطلة الثانوية!"</div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+                    <button class="btn btn-danger" onclick="kingBattle('babaa')">🧟‍♂️ ضربة البعبع</button>
+                    <button class="btn" style="background: var(--accent-purple);" onclick="kingBattle('magic')">🔮 سحر المذاكرة</button>
+                    <button class="btn" style="background: var(--accent-emerald);" onclick="kingBattle('heal')">🛡️ درع ونعناع</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>مصمم خصيصاً لدعم رحلة التفوق والنجاح في الثانوية العامة 🎓</p>
+    </footer>
+
+    <script>
+        /* --- 1. Whiteboard & PDF Editor --- */
+        const drawCanvas = document.getElementById('drawCanvas');
+        const drawCtx = drawCanvas.getContext('2d');
+        const pdfCanvas = document.getElementById('pdfCanvas');
+        const pdfCtx = pdfCanvas.getContext('2d');
+        const wrapper = document.getElementById('canvas-wrapper');
+
+        let isDrawing = false;
+        let penColor = '#ef4444';
+        let penSize = 3;
+        let currentMode = 'pen';
+        let pdfDoc = null, pageNum = 1;
+
+        function resizeCanvases() {
+            drawCanvas.width = wrapper.clientWidth;
+            drawCanvas.height = wrapper.clientHeight;
+            pdfCanvas.width = wrapper.clientWidth;
+            pdfCanvas.height = wrapper.clientHeight;
+            if (pdfDoc) renderPage(pageNum);
+        }
+        window.addEventListener('resize', resizeCanvases);
+        setTimeout(resizeCanvases, 200);
+
+        function setMode(mode) { currentMode = mode; }
+        function updatePenColor(color) { penColor = color; currentMode = 'pen'; }
+        function updatePenSize(size) { penSize = size; }
+        function clearCanvas() { drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height); }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            drawCtx.beginPath();
+            const rect = drawCanvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            drawCtx.moveTo(x, y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = drawCanvas.getBoundingClientRect();
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+            if (currentMode === 'eraser') {
+                drawCtx.clearRect(x - penSize * 2, y - penSize * 2, penSize * 4, penSize * 4);
+            } else {
+                drawCtx.strokeStyle = penColor;
+                drawCtx.lineWidth = penSize;
+                drawCtx.lineCap = 'round';
+                drawCtx.lineTo(x, y);
+                drawCtx.stroke();
+            }
+        }
+
+        function stopDrawing() { isDrawing = false; }
+
+        drawCanvas.addEventListener('mousedown', startDrawing);
+        drawCanvas.addEventListener('mousemove', draw);
+        drawCanvas.addEventListener('mouseup', stopDrawing);
+        drawCanvas.addEventListener('mouseleave', stopDrawing);
+
+        drawCanvas.addEventListener('touchstart', startDrawing, {passive: true});
+        drawCanvas.addEventListener('touchmove', draw, {passive: true});
+        drawCanvas.addEventListener('touchend', stopDrawing);
+
+        /* PDF Handling */
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        function loadPDF(e) {
+            const file = e.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                const fileReader = new FileReader();
+                fileReader.onload = function() {
+                    const typedarray = new Uint8Array(this.result);
+                    pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+                        pdfDoc = pdf;
+                        pageNum = 1;
+                        document.getElementById('pdf-nav').style.display = 'flex';
+                        document.getElementById('page-count').innerText = pdf.numPages;
+                        renderPage(pageNum);
+                    });
+                };
+                fileReader.readAsArrayBuffer(file);
+            }
+        }
+
+        function renderPage(num) {
+            pdfDoc.getPage(num).then(page => {
+                const viewport = page.getViewport({ scale: 1 });
+                const scale = Math.min(wrapper.clientWidth / viewport.width, wrapper.clientHeight / viewport.height);
+                const scaledViewport = page.getViewport({ scale: scale });
+
+                pdfCanvas.width = scaledViewport.width;
+                pdfCanvas.height = scaledViewport.height;
+
+                page.render({ pdfCanvasContext: pdfCtx, viewport: scaledViewport });
+                document.getElementById('page-num').innerText = num;
+            });
+        }
+
+        function prevPage() { if (pdfDoc && pageNum > 1) { pageNum--; renderPage(pageNum); } }
+        function nextPage() { if (pdfDoc && pageNum < pdfDoc.numPages) { pageNum++; renderPage(pageNum); } }
+
+        /* --- 2. Coins & Wallet System (Default 500 Coins) --- */
+        let coins = parseInt(localStorage.getItem('user_coins'));
+        if (isNaN(coins)) coins = 500;
+
+        function updateCoinsDisplay() {
+            document.getElementById('user-coins').innerText = coins;
+            document.getElementById('modal-wallet-coins').innerText = coins;
+            localStorage.setItem('user_coins', coins);
+        }
+        updateCoinsDisplay();
+
+        function openWalletModal() {
+            document.getElementById('wallet-modal').style.display = 'flex';
+        }
+        function closeWalletModal() {
+            document.getElementById('wallet-modal').style.display = 'none';
+        }
+
+        function addBonusCoins(amount) {
+            coins += amount;
+            updateCoinsDisplay();
+            alert(`تم إضافة ${amount} كوينز محفزة بنجاح! 🪙`);
+        }
+
+        function claimDailyCoins() {
+            const lastClaim = localStorage.getItem('last_coin_claim');
+            const today = new Date().toDateString();
+            if (lastClaim === today) {
+                alert("لقد استلمتي 75 كوينز اليوم بالفعل! تعالي غداً للحصول على كوينز جديدة 🪙");
+            } else {
+                coins += 75;
+                localStorage.setItem('last_coin_claim', today);
+                updateCoinsDisplay();
+                alert("تم إضافة 75 كوينز لرصيدك بنجاح! 🎉");
+            }
+        }
+
+        function deductCoins() {
+            if (coins >= 25) {
+                coins -= 25;
+                updateCoinsDisplay();
+                return true;
+            } else {
+                alert("عفواً! ليس لديكِ كوينز كافية (تحتاجين 25 كوين للعب). يمكنك كسب المزيد من المحفظة!");
+                return false;
+            }
+        }
+
+        /* --- 3. Quotes & Pomodoro --- */
+        const quotes = [
+            "رحلة الألف ميل تبدأ بـ خطوة، وكل دقيقة مذاكرة تقربك من حلمك!",
+            "التعب لحظة والنجاح يدوم طول العمر.. كملي يا بطلة!",
+            "الثانوية العامة مرحلة وستكون ذكراً جميلاً لفوزك الكبيرة."
+        ];
+        let qIdx = 0;
+        setInterval(() => {
+            qIdx = (qIdx + 1) % quotes.length;
+            document.getElementById('quote-text').innerText = quotes[qIdx];
+        }, 6000);
+
+        let timer, timeLeft = 25 * 60, isRunning = false;
+        function updateTimerDisplay() {
+            const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+            document.getElementById('timer').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+        document.getElementById('start-btn').addEventListener('click', () => {
+            if (!isRunning) {
+                isRunning = true;
+                timer = setInterval(() => {
+                    if (timeLeft > 0) { timeLeft--; updateTimerDisplay(); }
+                    else { clearInterval(timer); isRunning = false; alert("انتهى وقت المذاكرة!"); }
+                }, 1000);
+            }
+        });
+        document.getElementById('pause-btn').addEventListener('click', () => { clearInterval(timer); isRunning = false; });
+        document.getElementById('reset-btn').addEventListener('click', () => { clearInterval(timer); isRunning = false; timeLeft = 25 * 60; updateTimerDisplay(); });
+
+        /* --- 4. To-Do List & Notes --- */
+        let todos = JSON.parse(localStorage.getItem('prep_todos')) || [];
+        function renderTodos() {
+            const list = document.getElementById('todo-list');
+            list.innerHTML = '';
+            todos.forEach((t, i) => {
+                const li = document.createElement('li');
+                li.className = `todo-item ${t.completed ? 'completed' : ''}`;
+                li.innerHTML = `<span onclick="toggleTodo(${i})" style="cursor:pointer;"><i class="fa-regular ${t.completed ? 'fa-square-check' : 'fa-square'}"></i> ${t.text}</span><i class="fa-solid fa-trash" style="color:var(--accent-rose); cursor:pointer;" onclick="deleteTodo(${i})"></i>`;
+                list.appendChild(li);
+            });
+            localStorage.setItem('prep_todos', JSON.stringify(todos));
+        }
+        function addTodo() {
+            const input = document.getElementById('todo-input');
+            if (input.value.trim() !== '') { todos.push({ text: input.value.trim(), completed: false }); input.value = ''; renderTodos(); }
+        }
+        function toggleTodo(i) { todos[i].completed = !todos[i].completed; renderTodos(); }
+        function deleteTodo(i) { todos.splice(i, 1); renderTodos(); }
+        renderTodos();
+
+        const notesInput = document.getElementById('notes-input');
+        notesInput.value = localStorage.getItem('prep_notes') || '';
+        function saveNotes() { localStorage.setItem('prep_notes', notesInput.value); }
+
+        /* --- 5. Games Logic --- */
+        let activeGame = null;
+        function openGameModal() { document.getElementById('game-modal').style.display = 'flex'; }
+        function closeGameModal() {
+            document.getElementById('game-modal').style.display = 'none';
+            if (snakeInterval) clearInterval(snakeInterval);
+            activeGame = null;
+        }
+
+        function selectGame(gameKey) {
+            if (activeGame !== gameKey) {
+                if (!deductCoins()) return;
+                activeGame = gameKey;
+            }
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
+
+            if (gameKey === 'phoenix') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('panel-phoenix').classList.add('active');
+                if (snakeInterval) clearInterval(snakeInterval);
+            } else if (gameKey === 'snake') {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('panel-snake').classList.add('active');
+                startSnakeGame();
+            } else if (gameKey === 'kings') {
+                document.querySelectorAll('.tab-btn')[2].classList.add('active');
+                document.getElementById('panel-kings').classList.add('active');
+                if (snakeInterval) clearInterval(snakeInterval);
+                initKingLevel();
+            }
+        }
+
+        /* --- Phoenix Mini Game --- */
+        let prestige = 10;
+        function gameAction(a) {
+            const log = document.getElementById('game-log');
+            if (a === 'dress') { prestige += 15; log.innerText = "اختير طقم إمبراطوري أنيق جداً! (+15 هيبة)"; }
+            else if (a === 'cat') { prestige += 10; log.innerText = "جمع القط البرتقالي سلة هدايا وفواكه! (+10 هيبة)"; }
+            else if (a === 'study') { prestige += 20; log.innerText = "تم تطوير الثقافة والمهارة في القصر! (+20 هيبة)"; }
+            else if (a === 'promote') {
+                if (prestige >= 80) { document.getElementById('rank-title').innerText = "اللقب: إمبراطورة العنقاء 👑"; log.innerText = "ارتقيتِ العرش العالي!"; }
+                else log.innerText = "يلزمك 80 نقطة للترقية!";
+            }
+            if (prestige > 100) prestige = 100;
+            document.getElementById('stat-bar').style.width = prestige + '%';
+        }
+
+        /* --- Snake Game --- */
+        const canvas = document.getElementById('snakeCanvas');
+        const ctx = canvas.getContext('2d');
+        const box = 20;
+        let snake = [], food = {}, bomb = {}, dir = 'RIGHT', applesCollected = 0, snakeRound = 1, snakeInterval = null;
+
+        function startSnakeGame() {
+            if (snakeInterval) clearInterval(snakeInterval);
+            snake = [{x: 5 * box, y: 5 * box}, {x: 4 * box, y: 5 * box}];
+            dir = 'RIGHT';
+            applesCollected = 0;
+            document.getElementById('snake-apples').innerText = applesCollected;
+            document.getElementById('snake-round').innerText = snakeRound;
+            spawnFood();
+            spawnBomb();
+            snakeInterval = setInterval(drawSnake, 130);
+        }
+
+        function spawnFood() { food = { x: Math.floor(Math.random() * 12 + 1) * box, y: Math.floor(Math.random() * 12 + 1) * box }; }
+        function spawnBomb() {
+            bomb = { x: Math.floor(Math.random() * 12 + 1) * box, y: Math.floor(Math.random() * 12 + 1) * box };
+            if (bomb.x === food.x && bomb.y === food.y) spawnBomb();
+        }
+
+        function setSnakeDir(d) {
+            if (d === 'LEFT' && dir !== 'RIGHT') dir = 'LEFT';
+            if (d === 'UP' && dir !== 'DOWN') dir = 'UP';
+            if (d === 'RIGHT' && dir !== 'LEFT') dir = 'RIGHT';
+            if (d === 'DOWN' && dir !== 'UP') dir = 'DOWN';
+        }
+
+        function drawSnake() {
+            ctx.fillStyle = '#050811';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < snake.length; i++) {
+                ctx.font = '16px serif';
+                if (i === 0) ctx.fillText('🐍', snake[i].x, snake[i].y + 16);
+                else {
+                    ctx.fillStyle = '#10b981';
+                    ctx.beginPath();
+                    ctx.arc(snake[i].x + 8, snake[i].y + 8, 7, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            ctx.font = '16px serif';
+            ctx.fillText('🍎', food.x, food.y + 16);
+            ctx.fillText('💣', bomb.x, bomb.y + 16);
+
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if (dir === 'LEFT') snakeX -= box;
+            if (dir === 'UP') snakeY -= box;
+            if (dir === 'RIGHT') snakeX += box;
+            if (dir === 'DOWN') snakeY += box;
+
+            if (snakeX < 0) snakeX = canvas.width - box;
+            if (snakeX >= canvas.width) snakeX = 0;
+            if (snakeY < 0) snakeY = canvas.height - box;
+            if (snakeY >= canvas.height) snakeY = 0;
+
+            if (snakeX === bomb.x && snakeY === bomb.y) {
+                clearInterval(snakeInterval);
+                alert("💥 اوبس! خبطتي في القنبلة! انتهت اللعبة، حاولي مجدداً.");
+                startSnakeGame();
+                return;
+            }
+
+            if (snakeX === food.x && snakeY === food.y) {
+                applesCollected++;
+                document.getElementById('snake-apples').innerText = applesCollected;
+                spawnFood();
+                if (applesCollected % 3 === 0) spawnBomb();
+
+                if (applesCollected >= 10) {
+                    clearInterval(snakeInterval);
+                    if (snakeRound < 50) {
+                        snakeRound++;
+                        alert(`🎉 ممتاز! جمعتي 10 تفاحات وانتقلتِ للمستوى ${snakeRound}!`);
+                        startSnakeGame();
+                    } else {
+                        alert("🏆 مبروك! أنهيتي جميع الـ 50 مستواً في لعبة الثعبان!");
+                    }
+                    return;
+                }
+            } else {
+                snake.pop();
+            }
+
+            let newHead = {x: snakeX, y: snakeY};
+            snake.unshift(newHead);
+        }
+
+        /* --- 50 Unique Smart Enemies for Clash of Kings --- */
+        let kingLevel = 1, playerHp = 100, enemyHp = 100;
+
+        const fiftyEnemies = [
+            { name: "شبح الفيزياء 👻", emoji: "👻", quote: "أنا الذي لغزت نيوتن، وسوف أخفي ملخصاتك!" },
+            { name: "تنين الكيمياء العضوية 🐉", emoji: "🐉", quote: "سأغرقك في تفاعلات البنزين والألكانات!" },
+            { name: "غول الأحياء 👹", emoji: "👹", quote: "هل حفظتي تركيب الـ DNA بالكامل أم ستستسلمين؟" },
+            { name: "فارس الرياضيات ⚔️", emoji: "⚔️", quote: "حساب التفاضل والتكامل سلاحي، فما سلاحك؟" },
+            { name: "ملك النوم القهري 😴", emoji: "😴", quote: "ساعة واحدة مذاكرة وساعة نوم.. لا، بل 10 ساعات نوم!" },
+            { name: "عفريت النحو 👺", emoji: "👺", quote: "أعربي جملة (النجاح محتوم) وإلا خصمت منك الطاقة!" },
+            { name: "امبراطور الإشاعات 🦹", emoji: "🦹", quote: "يقولون أن التنسيق سيزيد هذا العام 100%!" },
+            { name: "ساحر التشتت 🧙‍♂️", emoji: "🧙‍♂️", quote: "انظري لإشعارات الموبايل، هناك رسالة جديدة تستحق المشاهدة!" },
+            { name: "وحش المماطلة 👾", emoji: "👾", quote: "لماذا تذاكرين اليوم بينما يمكنك البدء من يوم السبت؟" },
+            { name: "حارس الإحباط 🗿", emoji: "🗿", quote: "الوقت يمر والمنهج طويل جداً، كيف ستلحقين؟" },
+            { name: "قرش الجغرافيا 🦈", emoji: "🦈", quote: "توهتِ في خرائط العالم والتضاريس المعقدة!" },
+            { name: "عملاق التاريخ 🗿", emoji: "🗿", quote: "سأحاصرك بآلاف التواريخ وشخصيات الثورات!" },
+            { name: "ملك التعب 🧟", emoji: "🧟", quote: "عينيكِ تطبق من النعاس، أغلقي الكشكول فوراً!" },
+            { name: "وحش الإنجليزي 🐺", emoji: "🐺", quote: "Grammar & Vocabulary سيلتهمون درجاتك كاملة!" },
+            { name: "حاكم الفرنسية 🥐", emoji: "🥐", quote: "Bonjour! هل يمكنك تجاوز قواعد الأفعال الشاذة؟" },
+            { name: "شيطان القلق 👿", emoji: "👿", quote: "ماذا لو نسيتم المعطيات أثناء اللجنة؟" },
+            { name: "فارس الحر الملازم 🥵", emoji: "🥵", quote: "الجو حار جداً ولا يمكنك التركيز في السطور!" },
+            { name: "عفريت الشاي والقهوة ☕", emoji: "☕", quote: "الكافيين ينتهي مفعوله والتركيز يقل الآن!" },
+            { name: "سلطان المراجعات 🤴", emoji: "🤴", quote: "هناك 50 ملزمة جديدة يجب حلها قبل الفجر!" },
+            { name: "غول الأسئلة المقالية 📝", emoji: "📝", quote: "اكتبي 5 أسطر مع التعليل الدقيق والإثبات!" },
+            { name: "شبح البابل شيت 📄", emoji: "📄", quote: "ماذا لو ظللتِ الدائرة الخاطئة بالخطأ؟" },
+            { name: "ملك الفيزياء الحديثة ⚛️", emoji: "⚛️", quote: "كوانتم وفوتونات ستجعل رأسك يدور!" },
+            { name: "تنين التفاضل 📐", emoji: "📐", quote: "المشتقة الثانية في انتظارك ولن تحليها بسهولة!" },
+            { name: "فارس الاستاتيكا 🏗️", emoji: "🏗️", quote: "مركز الثقل والاتزان سيسقطك أرضاً!" },
+            { name: "حاكم الديناميكا 🚀", emoji: "🚀", quote: "سرعة وتسارع وجسيمات متحررة بلا توقف!" },
+            { name: "وحش البلاغة 📜", emoji: "📜", quote: "استخرجي استعارة مكنية وسر جمالها فوراً!" },
+            { name: "ملك الأدب العربي 🏛️", emoji: "🏛️", quote: "مدرسة الديوان وأبولّو ترحب بكِ في المعركة!" },
+            { name: "ساحر الأورجنيك 🧪", emoji: "🧪", quote: "سألقي عليكِ صيغة كيميائية معقدة لا تفك!" },
+            { name: "غول الجيولوجيا 🪨", emoji: "🪨", quote: "الصخور النارية والرسوبية ستردم على أهدافك!" },
+            { name: "شبح البيئة 🌍", emoji: "🌍", quote: "سأمرر عليكِ سلاسل الغذاء والتوازن البيئي!" },
+            { name: "عفريت التكاثر 🧬", emoji: "🧬", quote: "دورة حياة الفوجير وتعاقب الأجيال تلاحقك!" },
+            { name: "ملك المناعة 🛡️", emoji: "🛡️", quote: "الأجسام المضادة وخلايا T ستدافع عني!" },
+            { name: "امبراطور الفلسفة 🏛️", emoji: "🏛️", quote: "منطق وسفسطة وفلاسفة اليونان سيحيرون عقلك!" },
+            { name: "ساحر علم النفس 🧠", emoji: "🧠", quote: "الاستجابة والمثيرات ستلعب في مشاعرك!" },
+            { name: "وحش الاجتماع 👥", emoji: "👥", quote: "الظواهر الاجتماعية ستجذبك للقاع!" },
+            { name: "قرش الترجمة 🦈", emoji: "🦈", quote: "كلمة واحدة صعبة في السطر ستبطل ترجتك!" },
+            { name: "شبح الإيميل ✉️", emoji: "✉️", quote: "اكتبي مقالاً من 150 كلمة بدون أخطاء إملائية!" },
+            { name: "ملك وقت الامتحان ⏱️", emoji: "⏱️", quote: "باقي 5 دقائق فقط وهناك 10 أسئلة لم تحليها!" },
+            { name: "عفريت اللجنة 🏫", emoji: "🏫", quote: "المراقب يقف أمامك وينظر بنظرات مريبة!" },
+            { name: "امبراطور التردد ⚖️", emoji: "⚖️", quote: "هل الاختيار (أ) أم (ب)؟ ستظلين محتارة!" },
+            { name: "فارس السهر 🌙", emoji: "🌙", quote: "الساعة 4 صباحاً ولم تنهي الفصل الأول بعد!" },
+            { name: "وحش الأفكار العالية 💡", emoji: "💡", quote: "سؤال للعباقرة فقط، هل أنتِ جاهزة؟" },
+            { name: "ملك التراكميات 📚", emoji: "📚", quote: "أسئلة من الصف الأول والثاني الثانوي ستهاجمك!" },
+            { name: "شبح الحاسب الآلي 💻", emoji: "💻", quote: "خوارزمية معقدة ستلغبط خريطة تدفقك!" },
+            { name: "امبراطور التنسيق 🎓", emoji: "🎓", quote: "كل درجة تصنع فارقاً بين كلية وأخرى!" },
+            { name: "ساحر النتيجة 🏆", emoji: "🏆", quote: "أحلام العائلة كلها تتوقف على هذا الصمود!" },
+            { name: "غول الحاسدين 🧿", emoji: "🧿", quote: "عين الحسود تترصد شطارتك وتفوقك!" },
+            { name: "فارس الطاقة الإيجابية 🌟", emoji: "🌟", quote: "اختبار آخر مدى قدرتك على المواصلة!" },
+            { name: "الملك الحاسم 👑", emoji: "👑", quote: "المستوى قبل الأخير، استجمعي كل قوتك!" },
+            { name: "إمبراطور العرش النهائي 🔱", emoji: "🔱", quote: "أنا عقبتك الأخيرة قبل دخول الكلية التي تحلمين بها!" }
+        ];
+
+        /* Babaa Attacks Dialogues */
+        const babaaAttacks = [
+            "أطلقتِ 🧟‍♂️ ضربة البعبع المباغتة وفزعتِ الخصم بنجاح! 💥",
+            "ضربة البعبع 🧟‍♂️ خضّت العدو وطيرت 30 نقطة من صحته!",
+            "البعبع خرج للعدو 🧟‍♂️ وجعله يرتجف من الخوف ويفقد توازنه!",
+            "سددتِ 🧟‍♂️ ضربة البعبع السريعة والمرعبة بنجاح!"
+        ];
+
+        const smartMagic = [
+            "استخدمتِ 🔮 تعويذة (قانون نيوتن للمذاكرة) وصدمتِ الخصم بنجاح!",
+            "أطلقتِ 🔮 شعاع التركيز الفائق وحرقتِ كل محاولات التشتيت!",
+            "فعلتِ 🔮 مهارة الاستيعاب السريع ودمرت دفاعات العدو!"
+        ];
+
+        const funnyHeals = [
+            "شربتِ 🍵 كوب شاي بالنعناع مع رشة إصرار ورجعت طاقتك كاملة!",
+            "أخذتِ ☕ رشفة قهوة مركزة مع قطعة شوكولاتة وارتفع هرمون النجاح!",
+            "أخذتِ 💤 قيلولة محاربة لمدة 5 دقائق واسترجعتِ عافيتك بالكامل!"
+        ];
+
+        function initKingLevel() {
+            const currentEnemy = fiftyEnemies[(kingLevel - 1) % fiftyEnemies.length];
+            document.getElementById('enemy-name').innerText = currentEnemy.name;
+            document.getElementById('enemy-icon').innerText = currentEnemy.emoji;
+            document.getElementById('king-quote').innerText = `"${currentEnemy.quote}"`;
+            updateKingUI();
+        }
+
+        function updateKingUI() {
+            document.getElementById('king-level').innerText = kingLevel;
+            document.getElementById('player-hp').style.width = playerHp + '%';
+            document.getElementById('enemy-hp').style.width = enemyHp + '%';
+        }
+
+        function kingBattle(action) {
+            const qBox = document.getElementById('king-quote');
+            if (playerHp <= 0) { 
+                playerHp = 100; enemyHp = 100; 
+                qBox.innerText = "نهضتِ من جديد كالعنقاء! استجمعي طاقتكِ واهزميه الآن!";
+                initKingLevel(); 
+                return; 
+            }
+
+            const currentEnemy = fiftyEnemies[(kingLevel - 1) % fiftyEnemies.length];
+            let pDmg = 0;
+
+            if (action === 'babaa') {
+                pDmg = Math.floor(Math.random() * 25) + 20;
+                qBox.innerText = babaaAttacks[Math.floor(Math.random() * babaaAttacks.length)];
+            } else if (action === 'magic') {
+                pDmg = Math.floor(Math.random() * 35) + 15;
+                qBox.innerText = smartMagic[Math.floor(Math.random() * smartMagic.length)];
+            } else if (action === 'heal') {
+                playerHp = Math.min(100, playerHp + 30);
+                qBox.innerText = funnyHeals[Math.floor(Math.random() * funnyHeals.length)];
+            }
+
+            if (pDmg > 0) enemyHp -= pDmg;
+
+            if (enemyHp <= 0) {
+                if (kingLevel < 50) {
+                    kingLevel++;
+                    playerHp = 100; enemyHp = 100;
+                    alert(`🎉 كفووو يا بطلة! هزمتِ (${currentEnemy.name}) وانتقلتِ للمستوى ${kingLevel}!`);
+                    initKingLevel();
+                } else {
+                    qBox.innerText = "🏆 مبروك أسطوري! انتصرتِ في حرب الملوك وسحقتِ الـ 50 عدواً بالكامل! العرش والكلية في انتظارك!";
+                }
+            } else {
+                let eDmg = Math.floor(Math.random() * (10 + Math.floor(kingLevel / 3))) + 8;
+                playerHp -= eDmg;
+                
+                if (playerHp <= 0) {
+                    playerHp = 0;
+                    qBox.innerText = `💔 صدمكِ ${currentEnemy.name} بضربة قوية! اضغطي أي زر للنهوض وإعادة الجولة.`;
+                }
+            }
+            updateKingUI();
+        }
+    </script>
+</body>
+</html>
